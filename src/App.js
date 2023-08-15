@@ -13,7 +13,7 @@ function App() {
     const [textBlocks, setTextBlocks] = useState([]);
     const [editingTextIndex, setEditingTextIndex] = useState(null);
     const [signature, setSignature] = useState(null);
-    const [signaturePosition, setSignaturePosition] = useState({ x: 50, y: 50 });
+    const [signaturePosition, setSignaturePosition] = useState({ x: 0, y: 0 });
 
     const certificateRef = useRef(null);
 
@@ -63,11 +63,16 @@ function App() {
     const handleSignatureUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setSignature(event.target.result);
-            };
-            reader.readAsDataURL(file);
+            if (file.type === 'image/png') {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    setSignature(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setSignature(null);
+                alert('Пожалуйста, загрузите изображение в формате PNG.');
+            }
         }
     };
 
@@ -76,10 +81,11 @@ function App() {
     };
 
     const handleSavePDF = async () => {
-        const canvas = await html2canvas(certificateRef.current);
+        const scale = 3; // Увеличение разрешения вдвое
+        const canvas = await html2canvas(certificateRef.current, { scale });
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF();
-        pdf.addImage(imgData, 'PNG', 10, 10, 190, 277);
+        pdf.addImage(imgData, 'PNG', 0, 0, 210, 300, '', 'FAST');
         pdf.save('certificate.pdf');
     };
 
@@ -139,10 +145,12 @@ function App() {
                     >
                         <img
                             src={signature}
-                            alt="Electronic Signature"
+                            alt="Электронная подпись"
                             className="certificate__signature"
                             style={{
                                 position: 'absolute',
+                                top: '50%',
+                                left: '50%',
                                 width: '100px',
                                 height: 'auto',
                             }}
@@ -173,16 +181,16 @@ function App() {
                         />
                     </label>
                     <label className="properties__label">
-                        Upload Signature:
+                        Загрузка подписи (PNG):
                         <input
                             type="file"
-                            accept="image/*"
+                            accept="image/png"
                             onChange={handleSignatureUpload}
-                            className="properties__input"
+                            className="properties__input_signature properties__input_signature"
                         />
                     </label>
                     <button onClick={handleSavePDF} className="save-button">
-                        Save as PDF
+                        Сохранить в PDF
                     </button>
                 </div>
             )}
