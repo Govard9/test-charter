@@ -12,6 +12,8 @@ function App() {
     const [showProperties, setShowProperties] = useState(false);
     const [textBlocks, setTextBlocks] = useState([]);
     const [editingTextIndex, setEditingTextIndex] = useState(null);
+    const [signature, setSignature] = useState(null);
+    const [signaturePosition, setSignaturePosition] = useState({ x: 50, y: 50 });
 
     const certificateRef = useRef(null);
 
@@ -21,7 +23,7 @@ function App() {
             const y = e.clientY - certificateRef.current.getBoundingClientRect().top;
             setTextBlocks([...textBlocks, { text: '', x, y, fontFamily: font, fontSize }]);
             setShowProperties(true);
-            setEditingTextIndex(textBlocks.length); // Устанавил индекс нового текстового блока
+            setEditingTextIndex(textBlocks.length);
         }
     };
 
@@ -51,11 +53,26 @@ function App() {
 
     const handleInputKeyDown = (e, index) => {
         if (e.key === 'Enter') {
-            setEditingTextIndex(null); // Закрыл инпут
+            setEditingTextIndex(null);
             const updatedTextBlocks = [...textBlocks];
             updatedTextBlocks[index].text = e.target.value;
             setTextBlocks(updatedTextBlocks);
         }
+    };
+
+    const handleSignatureUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setSignature(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSignatureDrag = (e, data) => {
+        setSignaturePosition({ x: data.x, y: data.y });
     };
 
     const handleSavePDF = async () => {
@@ -114,6 +131,24 @@ function App() {
                         </div>
                     </Draggable>
                 ))}
+                {signature && (
+                    <Draggable
+                        bounds="parent"
+                        position={signaturePosition}
+                        onDrag={handleSignatureDrag}
+                    >
+                        <img
+                            src={signature}
+                            alt="Electronic Signature"
+                            className="certificate__signature"
+                            style={{
+                                position: 'absolute',
+                                width: '100px',
+                                height: 'auto',
+                            }}
+                        />
+                    </Draggable>
+                )}
             </div>
             {showProperties && (
                 <div className="properties">
@@ -137,8 +172,17 @@ function App() {
                             className="properties__input"
                         />
                     </label>
+                    <label className="properties__label">
+                        Upload Signature:
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleSignatureUpload}
+                            className="properties__input"
+                        />
+                    </label>
                     <button onClick={handleSavePDF} className="save-button">
-                        Сохранить в PDF
+                        Save as PDF
                     </button>
                 </div>
             )}
