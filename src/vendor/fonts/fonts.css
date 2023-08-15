@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "Inter";
+  font-weight: 400;
+  font-display: swap;
+  src: url("./Inter-Regular/Inter-Regular.woff2") format("woff2"),
+    url("./Inter-Regular/Inter-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Arial";
+  font-weight: 400;
+  font-display: swap;
+  src: url("./Arial-Regular/ArialMT.woff2") format("woff2"),
+  url("./Arial-Regular/ArialMT.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Arial";
+  font-weight: 400;
+  font-display: swap;
+  src: url("./TimesNewRoman-Regular/TimesNewRomanMTStd.woff2") format("woff2"),
+  url("./TimesNewRoman-Regular/TimesNewRomanMTStd.woff") format("woff");
+}

@@ -1,0 +1,57 @@
+/* App.css */
+
+.App {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.certificate {
+  position: relative;
+  display: inline-block;
+  max-width: 600px;
+}
+
+.certificate__image {
+  max-width: 100%;
+  height: auto;
+}
+
+.certificate__text-field {
+  position: absolute;
+  cursor: text;
+}
+
+.certificate__input {
+  background: none;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+}
+
+.properties {
+  margin: 20px 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.properties__label {
+  margin-right: 10px;
+  display: flex;
+}
+
+.properties__select,
+.properties__input {
+  padding: 5px;
+}
+
+.save-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
