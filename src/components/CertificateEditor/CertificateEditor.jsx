@@ -29,6 +29,12 @@ function CertificateEditor() {
         }
     };
 
+    const handleTextChange = (e, index) => {
+        const updatedTextBlocks = [...textBlocks];
+        updatedTextBlocks[index].text = e.target.value;
+        setTextBlocks(updatedTextBlocks);
+    };
+
     const handleFontChange = (e) => {
         setFont(e.target.value);
         if (editingTextIndex !== null) {
@@ -45,12 +51,6 @@ function CertificateEditor() {
             updatedTextBlocks[editingTextIndex].fontSize = parseInt(e.target.value);
             setTextBlocks(updatedTextBlocks);
         }
-    };
-
-    const handleTextChange = (e, index) => {
-        const updatedTextBlocks = [...textBlocks];
-        updatedTextBlocks[index].text = e.target.value;
-        setTextBlocks(updatedTextBlocks);
     };
 
     const handleInputKeyDown = (e, index) => {
@@ -124,6 +124,7 @@ function CertificateEditor() {
                 <TextBlock
                     index={index}
                     textBlock={textBlock}
+                    setEditingTextIndex={setEditingTextIndex}
                     editingTextIndex={editingTextIndex}
                     onTextChange={(e) => handleTextChange(e, index)}
                     onInputKeyDown={(e) => handleInputKeyDown(e, index)}

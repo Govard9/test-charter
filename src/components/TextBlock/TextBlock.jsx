@@ -6,7 +6,8 @@ function TextBlock({
                        textBlock,
                        editingTextIndex,
                        onTextChange,
-                       onInputKeyDown
+                       onInputKeyDown,
+                       setEditingTextIndex
                    }) {
     return (
         <Draggable bounds="parent">
@@ -34,7 +35,7 @@ function TextBlock({
                     />
                 ) : (
                     <div
-                        onDoubleClick={() => editingTextIndex(index)}
+                        onDoubleClick={() => setEditingTextIndex(index)}
                         style={{
                             cursor: 'pointer',
                             fontFamily: textBlock.fontFamily,
