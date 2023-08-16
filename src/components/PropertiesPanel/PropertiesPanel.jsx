@@ -7,7 +7,24 @@ function PropertiesPanel({
                              onFontSizeChange,
                              onSignatureUpload,
                              onSavePDF,
+                             onCertificateUpload
                          }) {
+
+    const handleCertificateUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.type === 'image/jpeg' || file.type === 'image/png') {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    onCertificateUpload(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Пожалуйста, загрузите изображение в формате JPEG или PNG.');
+            }
+        }
+    };
+
     return (
         <div className="properties">
             <label className="properties__label properties__label_fonts">
@@ -37,6 +54,15 @@ function PropertiesPanel({
                     accept="image/png"
                     onChange={onSignatureUpload}
                     className="properties__input_signature"
+                />
+            </label>
+            <label className="properties__label properties__label_upload-certificate">
+                <span className="properties__span-text properties__span-text_upload-certificate">Загрузка грамоты (JPEG/PNG: 600x850):</span>
+                <input
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    onChange={handleCertificateUpload}
+                    className="properties__input_certificate"
                 />
             </label>
             <button onClick={onSavePDF} className="save-button">

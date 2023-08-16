@@ -35,3 +35,12 @@
 .properties__input_font-size {
     width: 40px;
 }
+
+.properties__label_upload-certificate {
+    display: flex;
+    flex-direction: column;
+}
+
+.properties__span-text_upload-certificate {
+    text-align: left;
+}

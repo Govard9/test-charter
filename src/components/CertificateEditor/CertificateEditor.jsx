@@ -5,6 +5,7 @@ import charter from '../../image/charter.jpg';
 import TextBlock from "../TextBlock/TextBlock";
 import Signature from "../Signature/Signature";
 import PropertiesPanel from "../PropertiesPanel/PropertiesPanel";
+import CertificateUploader from "../CertificateUploader/CertificateUploader";
 
 function CertificateEditor() {
     const [font, setFont] = useState('Arial');
@@ -14,6 +15,7 @@ function CertificateEditor() {
     const [editingTextIndex, setEditingTextIndex] = useState(null);
     const [signature, setSignature] = useState(null);
     const [signaturePosition, setSignaturePosition] = useState({ x: 0, y: 0 });
+    const [uploadedCertificate, setUploadedCertificate] = useState(null);
 
     const certificateRef = useRef(null);
 
@@ -89,14 +91,35 @@ function CertificateEditor() {
         pdf.save('certificate.pdf');
     };
 
+    const handleCertificateUpload = (uploadedImage) => {
+        const img = new Image();
+        img.src = uploadedImage;
+        img.onload = () => {
+            if (img.width === 600 && img.height === 850) {
+                setUploadedCertificate(uploadedImage);
+            } else {
+                alert('Загруженная грамота должна быть размером 600x850 пикселей. Загрузка отменена.');
+            }
+        };
+    };
+
     return (
         <section className="certificate" ref={certificateRef}>
-            <img
-                src={charter}
-                alt="Certificate"
-                className="certificate__image"
-                onClick={handleTextClick}
-            />
+            {uploadedCertificate ? (
+                <img
+                    src={uploadedCertificate}
+                    alt="Uploaded Certificate"
+                    className="certificate__image"
+                    onClick={handleTextClick}
+                />
+            ) : (
+                <img
+                    src={charter}
+                    alt="Certificate"
+                    className="certificate__image"
+                    onClick={handleTextClick}
+                />
+            )}
             {textBlocks.map((textBlock, index) => (
                 <TextBlock
                     index={index}
@@ -121,6 +144,7 @@ function CertificateEditor() {
                     onFontSizeChange={handleFontSizeChange}
                     onSignatureUpload={handleSignatureUpload}
                     onSavePDF={handleSavePDF}
+                    onCertificateUpload={handleCertificateUpload}
                 />
             )}
         </section>
