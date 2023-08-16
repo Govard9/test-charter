@@ -1,0 +1,22 @@
+.certificate {
+    position: relative;
+    display: flex;
+    max-width: 600px;
+}
+
+.certificate__image {
+    max-width: 100%;
+    height: auto;
+}
+
+.certificate__text-field {
+    position: absolute;
+    cursor: text;
+}
+
+.certificate__input {
+    background: none;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+}
