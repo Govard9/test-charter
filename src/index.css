@@ -18,3 +18,6 @@
 
 /* PropertiesPanel */
 @import url('./components/PropertiesPanel/PropertiesPanel.css');
+
+/* FioTable */
+@import url('./components/FioTable/FioTable.css');

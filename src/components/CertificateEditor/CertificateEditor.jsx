@@ -16,6 +16,8 @@ function CertificateEditor() {
     const [signature, setSignature] = useState(null);
     const [signaturePosition, setSignaturePosition] = useState({ x: 0, y: 0 });
     const [uploadedCertificate, setUploadedCertificate] = useState(null);
+    const [showTable, setShowTable] = useState([]);
+    const [tableData, setTableData] = useState([]);
 
     const certificateRef = useRef(null);
 
@@ -128,6 +130,8 @@ function CertificateEditor() {
                     editingTextIndex={editingTextIndex}
                     onTextChange={(e) => handleTextChange(e, index)}
                     onInputKeyDown={(e) => handleInputKeyDown(e, index)}
+                    setShowTable={setShowTable}
+                    tableData={tableData}
                 />
             ))}
             {signature && (
@@ -146,6 +150,13 @@ function CertificateEditor() {
                     onSignatureUpload={handleSignatureUpload}
                     onSavePDF={handleSavePDF}
                     onCertificateUpload={handleCertificateUpload}
+                    showTable={showTable}
+                    setShowTable={setShowTable}
+                    tableData={tableData} // Передаем данные таблицы
+                    setTableData={setTableData} // Передаем функцию для обновления данных таблицы
+                    textBlocks={textBlocks}
+                    setTextBlocks={setTextBlocks}
+                    certificateRef={certificateRef}
                 />
             )}
         </section>

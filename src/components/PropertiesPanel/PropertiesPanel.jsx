@@ -1,4 +1,5 @@
 import React from 'react';
+import FioTable from "../FioTable/FioTable";
 
 function PropertiesPanel({
                              font,
@@ -7,7 +8,14 @@ function PropertiesPanel({
                              onFontSizeChange,
                              onSignatureUpload,
                              onSavePDF,
-                             onCertificateUpload
+                             onCertificateUpload,
+                             showTable,
+                             tableData,
+                             setTableData,
+                             setShowTable,
+                             textBlocks,
+                             setTextBlocks,
+                             certificateRef
                          }) {
 
     const handleCertificateUpload = (e) => {
@@ -65,6 +73,16 @@ function PropertiesPanel({
                     className="properties__input_certificate"
                 />
             </label>
+            {showTable && (
+                <FioTable
+                    tableData={tableData}
+                    setTableData={setTableData}
+                    setShowTable={setShowTable}
+                    textBlocks={textBlocks}
+                    setTextBlocks={setTextBlocks}
+                    certificateRef={certificateRef}
+                />
+            )}
             <button onClick={onSavePDF} className="save-button">
                 Сохранить в PDF
             </button>

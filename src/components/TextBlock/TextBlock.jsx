@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
     import Draggable from 'react-draggable';
 
 function TextBlock({
@@ -7,8 +7,11 @@ function TextBlock({
                        editingTextIndex,
                        onTextChange,
                        onInputKeyDown,
-                       setEditingTextIndex
+                       setEditingTextIndex,
+                       setShowTable,
+                       tableData
                    }) {
+
     return (
         <Draggable bounds="parent">
             <div
