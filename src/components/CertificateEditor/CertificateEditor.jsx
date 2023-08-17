@@ -6,6 +6,7 @@ import TextBlock from "../TextBlock/TextBlock";
 import Signature from "../Signature/Signature";
 import PropertiesPanel from "../PropertiesPanel/PropertiesPanel";
 import CertificateUploader from "../CertificateUploader/CertificateUploader";
+import Stamp from "../Stamp/Stamp";
 
 function CertificateEditor() {
     const [font, setFont] = useState('Arial');
@@ -18,6 +19,9 @@ function CertificateEditor() {
     const [uploadedCertificate, setUploadedCertificate] = useState(null);
     const [showTable, setShowTable] = useState([]);
     const [tableData, setTableData] = useState([]);
+    const [stamp, setStamp] = useState(null);
+    const [stampPosition, setStampPosition] = useState({ x: 0, y: 0 });
+
 
     const certificateRef = useRef(null);
 
@@ -80,8 +84,28 @@ function CertificateEditor() {
         }
     };
 
+    const handleStampUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.type === 'image/png') {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    setStamp(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setStamp(null);
+                alert('Пожалуйста, загрузите изображение в формате PNG.');
+            }
+        }
+    };
+
     const handleSignatureDrag = (e, data) => {
         setSignaturePosition({ x: data.x, y: data.y });
+    };
+
+    const handleStampDrag = (e, data) => {
+        setStampPosition({ x: data.x, y: data.y });
     };
 
     const handleSavePDF = async () => {
@@ -141,6 +165,13 @@ function CertificateEditor() {
                     onDrag={handleSignatureDrag}
                 />
             )}
+            {stamp && (
+                <Stamp
+                    stampImage={stamp}
+                    position={stampPosition}
+                    onDrag={handleStampDrag}
+                />
+            )}
             {showProperties && (
                 <PropertiesPanel
                     font={font}
@@ -157,6 +188,7 @@ function CertificateEditor() {
                     textBlocks={textBlocks}
                     setTextBlocks={setTextBlocks}
                     certificateRef={certificateRef}
+                    onStampUpload={handleStampUpload}
                 />
             )}
         </section>

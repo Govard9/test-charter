@@ -15,7 +15,8 @@ function PropertiesPanel({
                              setShowTable,
                              textBlocks,
                              setTextBlocks,
-                             certificateRef
+                             certificateRef,
+                             onStampUpload
                          }) {
 
     const handleCertificateUpload = (e) => {
@@ -62,6 +63,15 @@ function PropertiesPanel({
                     accept="image/png"
                     onChange={onSignatureUpload}
                     className="properties__input_signature"
+                />
+            </label>
+            <label className="properties__label properties__label_upload-stamp">
+                <span className="properties__span-text properties__span-text_upload-stamp">Загрузка печати (PNG):</span>
+                <input
+                    type="file"
+                    accept="image/png"
+                    onChange={onStampUpload}
+                    className="properties__input_stamp"
                 />
             </label>
             <label className="properties__label properties__label_upload-certificate">
