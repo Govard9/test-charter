@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import JsPDF from 'jspdf';
 
 function FioTable({ tableData, setTableData, setShowTable, certificateRef, textBlocks, setTextBlocks }) {
 
@@ -24,28 +24,28 @@ function FioTable({ tableData, setTableData, setShowTable, certificateRef, textB
 
     const handleSaveAllPDFs = async () => {
         const scale = 3;
-        const pdf = new jsPDF();
+        const pdf = new JsPDF();
 
-        for (let rowIndex = 0; rowIndex < tableData.length; rowIndex++) {
+        for (let rowIndex = 0; rowIndex < tableData.length; rowIndex + 1) {
             const row = tableData[rowIndex];
             if (row) {
                 const fio = `${row.lastName} ${row.firstName} ${row.middleName}`;
 
                 // Создаем копию textBlocks для текущей итерации и обновляем %фио на данные ФИО
-                const updatedTextBlocks = textBlocks.map(block => {
-                    return {
+                const updatedTextBlocks = textBlocks.map(block => ({
                         ...block,
                         text: block.text === '%фио' ? fio : block.text,
-                    };
-                });
+                    }));
 
                 // Обновляем состояние textBlocks для текущей итерации
                 setTextBlocks(updatedTextBlocks);
 
                 // Задержка перед генерацией холста
+                // eslint-disable-next-line no-await-in-loop,no-promise-executor-return
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
                 // Создаем временный canvas для текущей строки
+                // eslint-disable-next-line no-await-in-loop
                 const tempCanvas = await html2canvas(certificateRef.current, { scale });
 
                 // Получаем base64 код изображения

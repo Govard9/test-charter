@@ -16,8 +16,11 @@
 /* Signature */
 @import url('./components/Signature/Signature.css');
 
-/* PropertiesPanel */
-@import url('./components/PropertiesPanel/PropertiesPanel.css');
+/* StylePropertiesPanel */
+@import url('components/StylePropertiesPanel/StylePropertiesPanel.css');
+
+/* LateralPropertiesPanel */
+@import url('components/LateralPropertiesPanel/LateralPropertiesPanel.css');
 
 /* FioTable */
 @import url('./components/FioTable/FioTable.css');

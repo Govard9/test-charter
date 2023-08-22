@@ -1,50 +1,114 @@
 {
-  "homepage": "https://govard9.github.io/test-charter",
-  "name": "test-charter",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@react-pdf/renderer": "^3.1.12",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "async-each": "^1.0.6",
-    "html2canvas": "^1.4.1",
-    "html2pdf.js": "^0.10.1",
-    "jspdf": "^2.5.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-draggable": "^4.4.5",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "gh-pages": "^6.0.0"
-  }
+	"name": "frontend",
+	"version": "0.1.0",
+	"private": true,
+	"homepage": "https://govard9.github.io/test-charter",
+	"dependencies": {
+		"@testing-library/jest-dom": "^5.17.0",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^13.5.0",
+		"html2canvas": "^1.4.1",
+		"html2pdf.js": "^0.10.1",
+		"jspdf": "^2.5.1",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-draggable": "^4.4.5",
+		"react-scripts": "5.0.1",
+		"uuid": "^9.0.0",
+		"web-vitals": "^2.1.4"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build",
+		"eject": "react-scripts eject",
+		"lint": "eslint . --ext .js,.jsx .",
+		"lint:fix": "npm run lint -- --fix",
+		"format": "prettier . --write",
+		"prepare": "husky install",
+		"lint-staged": "lint-staged",
+		"commit": "cz"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest",
+			"airbnb",
+			"airbnb/hooks",
+			"prettier"
+		],
+		"rules": {
+			"react/jsx-filename-extension": [
+				1,
+				{
+					"extensions": [
+						".js",
+						".jsx"
+					]
+				}
+			],
+			"react/react-in-jsx-scope": "off",
+			"import/prefer-default-export": "off",
+			"react/function-component-definition": "off",
+			"react/jsx-props-no-spreading": "off",
+			"react/no-unescaped-entities": "off",
+			"react/button-has-type": "off",
+			"react/prop-types": 0,
+			"react/no-array-index-key": "off",
+			"jsx-a11y/click-events-have-key-events": "off",
+			"jsx-a11y/no-noninteractive-element-interactions": "off",
+			"no-nested-ternary": "off",
+			"no-unused-vars": "off"
+		},
+		"overrides": [
+			{
+				"files": [
+					"**/*.stories.*",
+					"src/stories/**/*"
+				],
+				"rules": {
+					"import/no-anonymous-default-export": "off",
+					"import/no-extraneous-dependencies": "off"
+				}
+			}
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"commitizen": "^4.3.0",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-config-prettier": "^9.0.0",
+		"gh-pages": "^6.0.0",
+		"husky": "^8.0.3",
+		"lint-staged": "^14.0.0",
+		"prettier": "^3.0.2"
+	},
+	"lint-staged": {
+		"*.{js,jsx}": "npm run lint",
+		"*.{js,jsx,css,md,html,json}": "npm run format"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run lint-staged"
+		}
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	}
 }

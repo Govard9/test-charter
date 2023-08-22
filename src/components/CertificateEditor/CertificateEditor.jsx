@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import JsPDF from 'jspdf';
 import charter from '../../image/charter.jpg';
-import TextBlock from "../TextBlock/TextBlock";
-import Signature from "../Signature/Signature";
-import PropertiesPanel from "../PropertiesPanel/PropertiesPanel";
-import CertificateUploader from "../CertificateUploader/CertificateUploader";
-import Stamp from "../Stamp/Stamp";
+import TextBlock from '../TextBlock/TextBlock';
+import Signature from '../Signature/Signature';
+import Stamp from '../Stamp/Stamp';
+import LateralPropertiesPanel from "../LateralPropertiesPanel/LateralPropertiesPanel";
 
 function CertificateEditor() {
     const [font, setFont] = useState('Arial');
@@ -15,13 +14,14 @@ function CertificateEditor() {
     const [textBlocks, setTextBlocks] = useState([]);
     const [editingTextIndex, setEditingTextIndex] = useState(null);
     const [signature, setSignature] = useState(null);
-    const [signaturePosition, setSignaturePosition] = useState({ x: 0, y: 0 });
+    const [signaturePosition, setSignaturePosition] = useState({x: 0, y: 0});
     const [uploadedCertificate, setUploadedCertificate] = useState(null);
     const [showTable, setShowTable] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [stamp, setStamp] = useState(null);
-    const [stampPosition, setStampPosition] = useState({ x: 0, y: 0 });
-
+    const [stampPosition, setStampPosition] = useState({x: 0, y: 0});
+    const [activeTextIndex, setActiveTextIndex] = useState(null);
+    const [textDecorationStyle, setTextDecorationStyle] = useState('none');
 
     const certificateRef = useRef(null);
 
@@ -29,9 +29,21 @@ function CertificateEditor() {
         if (!editingTextIndex) {
             const x = e.clientX - certificateRef.current.getBoundingClientRect().left;
             const y = e.clientY - certificateRef.current.getBoundingClientRect().top;
-            setTextBlocks([...textBlocks, { text: '', x, y, fontFamily: font, fontSize }]);
-            setShowProperties(true);
+            setTextBlocks([
+                ...textBlocks,
+                {
+                    text: '',
+                    x, y,
+                    fontFamily: font,
+                    fontSize,
+                    isItalic: false,
+                    isDecoration: 'none',
+                    isBold: false
+                },
+            ]);
             setEditingTextIndex(textBlocks.length);
+            setActiveTextIndex(textBlocks.length);
+            setShowProperties(true);
         }
     };
 
@@ -51,10 +63,13 @@ function CertificateEditor() {
     };
 
     const handleFontSizeChange = (e) => {
-        setFontSize(parseInt(e.target.value));
+        setFontSize(parseInt(e.target.value, 10));
         if (editingTextIndex !== null) {
             const updatedTextBlocks = [...textBlocks];
-            updatedTextBlocks[editingTextIndex].fontSize = parseInt(e.target.value);
+            updatedTextBlocks[editingTextIndex].fontSize = parseInt(
+                e.target.value,
+                10
+            );
             setTextBlocks(updatedTextBlocks);
         }
     };
@@ -65,6 +80,8 @@ function CertificateEditor() {
             const updatedTextBlocks = [...textBlocks];
             updatedTextBlocks[index].text = e.target.value;
             setTextBlocks(updatedTextBlocks);
+            setShowProperties(false);
+            setActiveTextIndex(null);
         }
     };
 
@@ -101,18 +118,18 @@ function CertificateEditor() {
     };
 
     const handleSignatureDrag = (e, data) => {
-        setSignaturePosition({ x: data.x, y: data.y });
+        setSignaturePosition({x: data.x, y: data.y});
     };
 
     const handleStampDrag = (e, data) => {
-        setStampPosition({ x: data.x, y: data.y });
+        setStampPosition({x: data.x, y: data.y});
     };
 
     const handleSavePDF = async () => {
-        const scale = 3; // Увеличение разрешения вдвое
-        const canvas = await html2canvas(certificateRef.current, { scale });
+        const scale = 3; // Увеличение разрешения в 3 раза
+        const canvas = await html2canvas(certificateRef.current, {scale});
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
+        const pdf = new JsPDF();
         pdf.addImage(imgData, 'PNG', 0, 0, 210, 300, '', 'FAST');
         pdf.save('certificate.pdf');
     };
@@ -124,7 +141,9 @@ function CertificateEditor() {
             if (img.width === 600 && img.height === 850) {
                 setUploadedCertificate(uploadedImage);
             } else {
-                alert('Загруженная грамота должна быть размером 600x850 пикселей. Загрузка отменена.');
+                alert(
+                    'Загруженная грамота должна быть размером 600x850 пикселей. Загрузка отменена.'
+                );
             }
         };
     };
@@ -148,16 +167,47 @@ function CertificateEditor() {
             )}
             {textBlocks.map((textBlock, index) => (
                 <TextBlock
+                    key={index}
                     index={index}
                     textBlock={textBlock}
                     setEditingTextIndex={setEditingTextIndex}
                     editingTextIndex={editingTextIndex}
                     onTextChange={(e) => handleTextChange(e, index)}
                     onInputKeyDown={(e) => handleInputKeyDown(e, index)}
-                    setShowTable={setShowTable}
-                    tableData={tableData}
+                    font={font}
+                    fontSize={fontSize}
+                    onFontChange={handleFontChange}
+                    onFontSizeChange={handleFontSizeChange}
+                    textBlocks={textBlocks}
+                    setTextBlocks={setTextBlocks}
+                    certificateRef={certificateRef}
+                    isVisible={showProperties}
+                    setActiveTextIndex={setActiveTextIndex}
+                    activeTextIndex={activeTextIndex}
+                    setShowProperties={setShowProperties}
+                    setTextDecorationStyle={setTextDecorationStyle}
+                    textDecorationStyle={textDecorationStyle}
                 />
             ))}
+
+            <div className="properties__container">
+                <LateralPropertiesPanel
+                    onSignatureUpload={handleSignatureUpload}
+                    onSavePDF={handleSavePDF}
+                    onCertificateUpload={handleCertificateUpload}
+                    showTable={showTable}
+                    setShowTable={setShowTable}
+                    tableData={tableData} // Передаем данные таблицы
+                    setTableData={setTableData} // Передаем функцию для обновления данных таблицы
+                    textBlocks={textBlocks}
+                    setTextBlocks={setTextBlocks}
+                    certificateRef={certificateRef}
+                    onStampUpload={handleStampUpload}
+                    activeTextIndex={activeTextIndex}
+                    setActiveTextIndex={setActiveTextIndex}
+                />
+            </div>
+
             {signature && (
                 <Signature
                     signature={signature}
@@ -170,25 +220,6 @@ function CertificateEditor() {
                     stampImage={stamp}
                     position={stampPosition}
                     onDrag={handleStampDrag}
-                />
-            )}
-            {showProperties && (
-                <PropertiesPanel
-                    font={font}
-                    fontSize={fontSize}
-                    onFontChange={handleFontChange}
-                    onFontSizeChange={handleFontSizeChange}
-                    onSignatureUpload={handleSignatureUpload}
-                    onSavePDF={handleSavePDF}
-                    onCertificateUpload={handleCertificateUpload}
-                    showTable={showTable}
-                    setShowTable={setShowTable}
-                    tableData={tableData} // Передаем данные таблицы
-                    setTableData={setTableData} // Передаем функцию для обновления данных таблицы
-                    textBlocks={textBlocks}
-                    setTextBlocks={setTextBlocks}
-                    certificateRef={certificateRef}
-                    onStampUpload={handleStampUpload}
                 />
             )}
         </section>
