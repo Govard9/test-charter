@@ -2,7 +2,7 @@
 	"name": "frontend",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://govard9.github.io/test-charter",
+	"homepage": "https://github.com/certificates-and-commendations/frontend",
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.17.0",
 		"@testing-library/react": "^13.4.0",
@@ -60,7 +60,9 @@
 			"jsx-a11y/click-events-have-key-events": "off",
 			"jsx-a11y/no-noninteractive-element-interactions": "off",
 			"no-nested-ternary": "off",
-			"no-unused-vars": "off"
+			"no-unused-vars": "off",
+			"no-plusplus": "off",
+			"no-await-in-loop": "off"
 		},
 		"overrides": [
 			{

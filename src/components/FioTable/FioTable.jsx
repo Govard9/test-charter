@@ -26,27 +26,25 @@ function FioTable({ tableData, setTableData, setShowTable, certificateRef, textB
         const scale = 3;
         const pdf = new JsPDF();
 
-        for (let rowIndex = 0; rowIndex < tableData.length; rowIndex + 1) {
+        for (let rowIndex = 0; rowIndex < tableData.length; rowIndex++) {
             const row = tableData[rowIndex];
             if (row) {
                 const fio = `${row.lastName} ${row.firstName} ${row.middleName}`;
 
                 // Создаем копию textBlocks для текущей итерации и обновляем %фио на данные ФИО
                 const updatedTextBlocks = textBlocks.map(block => ({
-                        ...block,
-                        text: block.text === '%фио' ? fio : block.text,
-                    }));
-
-                // Обновляем состояние textBlocks для текущей итерации
-                setTextBlocks(updatedTextBlocks);
-
-                // Задержка перед генерацией холста
-                // eslint-disable-next-line no-await-in-loop,no-promise-executor-return
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                    ...block,
+                    text: block.text === '%фио' ? fio : block.text,
+                }));
 
                 // Создаем временный canvas для текущей строки
-                // eslint-disable-next-line no-await-in-loop
-                const tempCanvas = await html2canvas(certificateRef.current, { scale });
+                const tempCanvas = await new Promise(resolve => {
+                    setTextBlocks(updatedTextBlocks);
+                    setTimeout(async () => {
+                        const canvas = await html2canvas(certificateRef.current, { scale });
+                        resolve(canvas);
+                    }, 1000);
+                });
 
                 // Получаем base64 код изображения
                 const imgData = tempCanvas.toDataURL('image/png').split(',')[1];
@@ -56,9 +54,6 @@ function FioTable({ tableData, setTableData, setShowTable, certificateRef, textB
                     pdf.addPage();
                 }
                 pdf.addImage(imgData, 'PNG', 0, 0, 210, 300, '', 'FAST');
-
-                // Восстанавливаем исходное состояние textBlocks
-                setTextBlocks(updatedTextBlocks);
             }
         }
 
