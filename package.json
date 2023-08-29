@@ -9,10 +9,12 @@
 		"@testing-library/user-event": "^13.5.0",
 		"html2canvas": "^1.4.1",
 		"html2pdf.js": "^0.10.1",
+		"husky": "^8.0.3",
 		"jspdf": "^2.5.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-draggable": "^4.4.5",
+		"react-router-dom": "^6.15.0",
 		"react-scripts": "5.0.1",
 		"uuid": "^9.0.0",
 		"web-vitals": "^2.1.4"
@@ -29,7 +31,7 @@
 		"format": "prettier . --write",
 		"prepare": "husky install",
 		"lint-staged": "lint-staged",
-		"commit": "cz"
+		"commit": "npm run lint-staged && git add -A && cz"
 	},
 	"eslintConfig": {
 		"extends": [
@@ -55,14 +57,20 @@
 			"react/jsx-props-no-spreading": "off",
 			"react/no-unescaped-entities": "off",
 			"react/button-has-type": "off",
-			"react/prop-types": 0,
+			"react/prop-types": "off",
 			"react/no-array-index-key": "off",
 			"jsx-a11y/click-events-have-key-events": "off",
 			"jsx-a11y/no-noninteractive-element-interactions": "off",
 			"no-nested-ternary": "off",
 			"no-unused-vars": "off",
 			"no-plusplus": "off",
-			"no-await-in-loop": "off"
+			"no-await-in-loop": "off",
+			"arrow-body-style": "off",
+			"no-debugger": "off",
+			"no-object-shorthand": "off",
+			"react-hooks/exhaustive-deps": "off",
+			"no-console": "off",
+			"consistent-return": "off"
 		},
 		"overrides": [
 			{
@@ -95,18 +103,18 @@
 		"eslint-config-airbnb": "^19.0.4",
 		"eslint-config-prettier": "^9.0.0",
 		"gh-pages": "^6.0.0",
-		"husky": "^8.0.3",
 		"lint-staged": "^14.0.0",
 		"prettier": "^3.0.2"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm run lint-staged",
+			"pre-push": "echo pre-push"
+		}
 	},
 	"lint-staged": {
 		"*.{js,jsx}": "npm run lint",
 		"*.{js,jsx,css,md,html,json}": "npm run format"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "npm run lint-staged"
-		}
 	},
 	"config": {
 		"commitizen": {

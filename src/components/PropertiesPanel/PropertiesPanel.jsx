@@ -22,7 +22,7 @@ function PropertiesPanel({
     const handleCertificateUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.type === 'image/jpeg' || file.type === 'image/png') {
+            if (file.type === 'images/jpeg' || file.type === 'images/png') {
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     onCertificateUpload(event.target.result);

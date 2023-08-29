@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FioTable from '../FioTable/FioTable';
 
 function LateralPropertiesPanel({
@@ -12,26 +12,30 @@ function LateralPropertiesPanel({
 	textBlocks,
 	setTextBlocks,
 	certificateRef,
-	onStampUpload
+	onStampUpload,
+	onCreateJson,
 }) {
 	const handleCertificateUpload = (e) => {
 		const file = e.target.files[0];
 		if (file) {
-			if (file.type === 'image/jpeg' || file.type === 'image/png') {
+			if (file.type === 'images/jpeg' || file.type === 'images/png') {
 				const reader = new FileReader();
 				reader.onload = (event) => {
 					onCertificateUpload(event.target.result);
 				};
 				reader.readAsDataURL(file);
 			} else {
-				alert('Пожалуйста, загрузите изображение в формате JPEG или PNG.');
+				// alert('Пожалуйста, загрузите изображение в формате JPEG или PNG.');
 			}
 		}
 	};
 
 	return (
 		<div className="properties properties_lateral">
-			<label className="properties__label properties__label_signature" htmlFor="signatureSelect">
+			<label
+				className="properties__label properties__label_signature"
+				htmlFor="signatureSelect"
+			>
 				<span className="properties__span-text">Загрузка подписи (PNG):</span>
 				<input
 					id="signatureSelect"
@@ -41,7 +45,10 @@ function LateralPropertiesPanel({
 					className="properties__input_signature"
 				/>
 			</label>
-			<label className="properties__label properties__label_upload-stamp" htmlFor="uploadStampSelect">
+			<label
+				className="properties__label properties__label_upload-stamp"
+				htmlFor="uploadStampSelect"
+			>
 				<span className="properties__span-text properties__span-text_upload-stamp">
 					Загрузка печати (PNG):
 				</span>
@@ -53,7 +60,10 @@ function LateralPropertiesPanel({
 					className="properties__input_stamp"
 				/>
 			</label>
-			<label className="properties__label properties__label_upload-certificate" htmlFor="uploadCertificateSelect">
+			<label
+				className="properties__label properties__label_upload-certificate"
+				htmlFor="uploadCertificateSelect"
+			>
 				<span className="properties__span-text properties__span-text_upload-certificate">
 					Загрузка грамоты (JPEG/PNG: 600x850):
 				</span>
@@ -73,6 +83,7 @@ function LateralPropertiesPanel({
 					textBlocks={textBlocks}
 					setTextBlocks={setTextBlocks}
 					certificateRef={certificateRef}
+					onCreateJson={onCreateJson}
 				/>
 			)}
 			<button onClick={onSavePDF} className="save-button">

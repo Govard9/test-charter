@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 function StylePropertiesPanel({
-	 index,
-	font,
-	fontSize,
-	onFontChange,
-	onFontSizeChange,
-	textBlocks,
-	setTextBlocks,
-	isVisible,
-	activeTextIndex,
-    setTextDecorationStyle
-}) {
+								  index,
+								  font,
+								  fontSize,
+								  onFontChange,
+								  onFontSizeChange,
+								  textBlocks,
+								  setTextBlocks,
+								  isVisible,
+								  activeTextIndex,
+								  setTextDecorationStyle,
+								  textBlockStyles,
+								  setTextBlockStyles
+							  }) {
 
 	const handleItalicChange = () => {
 		const updatedTextBlocks = [...textBlocks];
@@ -20,19 +22,18 @@ function StylePropertiesPanel({
 		setTextBlocks(updatedTextBlocks);
 	};
 
-	const handleTextDecorationChange = (style) => {
-		const updatedTextBlocks = [...textBlocks];
-		updatedTextBlocks[index] = { ...updatedTextBlocks[index] };
-
+	const handleTextDecorationChange = (currentIndex, style) => {
+		const updatedStyles = [...textBlockStyles];
+		updatedStyles[currentIndex] = { ...updatedStyles[currentIndex] };
 		if (style === 'none') {
-			updatedTextBlocks[index].isDecoration = 'none';
+			updatedStyles[currentIndex].isDecoration = 'none';
 		} else if (style === 'underline') {
-			updatedTextBlocks[index].isDecoration = 'underline';
+			updatedStyles[currentIndex].isDecoration = 'underline';
 		} else if (style === 'strikethrough') {
-			updatedTextBlocks[index].isDecoration = 'strikethrough';
+			updatedStyles[currentIndex].isDecoration = 'strikethrough';
 		}
 
-		setTextBlocks(updatedTextBlocks);
+		setTextBlockStyles(updatedStyles);
 		setTextDecorationStyle(style);
 	};
 
@@ -44,8 +45,18 @@ function StylePropertiesPanel({
 	};
 
 	return (
-		<div className={`properties ${isVisible && activeTextIndex === index ? 'properties_visible' : 'properties_hidden'}`}>
-			<label className="properties__label properties__label_fonts" htmlFor="fontSelect">
+		<div
+			className={`properties ${
+				isVisible && activeTextIndex === index
+					? 'properties_visible'
+					: 'properties_hidden'
+			}`}
+		>
+			<button className="properties__button-move">Двигать панель</button>
+			<label
+				className="properties__label properties__label_fonts"
+				htmlFor="fontSelect"
+			>
 				<span className="properties__span-text">Font:</span>
 				<select
 					id="fontSelect"
@@ -57,17 +68,24 @@ function StylePropertiesPanel({
 					<option value="Times New Roman">Times New Roman</option>
 				</select>
 			</label>
-			<label className="properties__label properties__label_font-size" htmlFor="fontSizeSelect">
+			<label
+				className="properties__label properties__label_font-size"
+				htmlFor="fontSizeSelect"
+			>
 				<span className="properties__span-text">Font Size:</span>
 				<input
 					id="fontSizeSelect"
 					type="number"
+					min={1}
 					value={fontSize}
 					onChange={onFontSizeChange}
 					className="properties__input properties__input_font-size"
 				/>
 			</label>
-			<label className="properties__label properties__label_italic" htmlFor="italicCheckbox">
+			<label
+				className="properties__label properties__label_italic"
+				htmlFor="italicCheckbox"
+			>
 				<input
 					id="italicCheckbox"
 					type="checkbox"
@@ -76,7 +94,10 @@ function StylePropertiesPanel({
 				/>
 				<span className="properties__span-text">Курсив</span>
 			</label>
-			<label className="properties__label properties__label_bold" htmlFor="boldCheckbox">
+			<label
+				className="properties__label properties__label_bold"
+				htmlFor="boldCheckbox"
+			>
 				<input
 					id="boldCheckbox"
 					type="checkbox"
@@ -85,35 +106,47 @@ function StylePropertiesPanel({
 				/>
 				<span className="properties__span-text">Полужирный</span>
 			</label>
-			<label className="properties__label properties__label_text-decoration" htmlFor="underlineRadio">
+			<label
+				className="properties__label properties__label_text-decoration"
+				htmlFor="underlineRadio"
+			>
 				<input
+					id="underlineRadio"
 					type="radio"
-					name="textDecoration"
+					name={`textDecoration-${index}`}
 					value="underline"
-					checked={textBlocks[index].isDecoration === 'underline'}
-					onChange={() => handleTextDecorationChange('underline')}
+					checked={textBlockStyles[index].isDecoration === 'underline'}
+					onChange={() => handleTextDecorationChange(index, 'underline')}
 				/>
 				<span className="properties__span-text">Подчеркнутый</span>
 			</label>
 
-			<label className="properties__label properties__label_text-decoration" htmlFor="strikethroughRadio">
+			<label
+				className="properties__label properties__label_text-decoration"
+				htmlFor="strikethroughRadio"
+			>
 				<input
+					id="strikethroughRadio"
 					type="radio"
-					name="textDecoration"
+					name={`textDecoration-${index}`}
 					value="strikethrough"
-					checked={textBlocks[index].isDecoration === 'strikethrough'}
-					onChange={() => handleTextDecorationChange('strikethrough')}
+					checked={textBlockStyles[index].isDecoration === 'strikethrough'}
+					onChange={() => handleTextDecorationChange(index, 'strikethrough')}
 				/>
 				<span className="properties__span-text">Зачеркнутый</span>
 			</label>
 
-			<label className="properties__label properties__label_text-decoration" htmlFor="noneRadio">
+			<label
+				className="properties__label properties__label_text-decoration"
+				htmlFor="noneRadio"
+			>
 				<input
+					id="noneRadio"
 					type="radio"
-					name="textDecoration"
+					name={`textDecoration-${index}`}
 					value="none"
-					checked={textBlocks[index].isDecoration === 'none'}
-					onChange={() => handleTextDecorationChange('none')}
+					checked={textBlockStyles[index].isDecoration === 'none'}
+					onChange={() => handleTextDecorationChange(index, 'none')}
 				/>
 				<span className="properties__span-text">Нет</span>
 			</label>
