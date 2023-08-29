@@ -10,7 +10,9 @@ function TextBlock({
 					   onInputKeyDown,
 					   setEditingTextIndex,
 					   font,
+					   setFont,
 					   fontSize,
+					   setFontSize,
 					   onFontChange,
 					   onFontSizeChange,
 					   onSignatureUpload,
@@ -81,6 +83,8 @@ function TextBlock({
 							setEditingTextIndex(index);
 							setShowProperties(true);
 							setActiveTextIndex(index);
+							setFontSize(textBlock.fontSize)
+							setFont(textBlock.fontFamily)
 						}}
 						style={{
 							fontFamily: textBlock.fontFamily,

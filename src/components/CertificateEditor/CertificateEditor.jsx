@@ -29,6 +29,9 @@ function CertificateEditor() {
 	const certificateRef = useRef(null);
 
 	const handleTextClick = (e) => {
+		setFontSize(14)
+		setFont('Arial')
+
 		if (!editingTextIndex) {
 			setTextBlocks([
 				...textBlocks,
@@ -36,8 +39,8 @@ function CertificateEditor() {
 					text: '',
 					x: '',
 					y: '',
-					fontFamily: font,
-					fontSize
+					fontFamily: 'Arial',
+					fontSize: 14
 				},
 			]);
 			setTextBlockStyles([...textBlockStyles, {
@@ -222,7 +225,9 @@ function CertificateEditor() {
 					onTextChange={(e) => handleTextChange(e, index)}
 					onInputKeyDown={(e) => handleInputKeyDown(e, index)}
 					font={font}
+					setFont={setFont}
 					fontSize={fontSize}
+					setFontSize={setFontSize}
 					onFontChange={handleFontChange}
 					onFontSizeChange={handleFontSizeChange}
 					textBlocks={textBlocks}
